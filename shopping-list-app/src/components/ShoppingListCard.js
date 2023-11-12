@@ -1,4 +1,3 @@
-// src/components/ShoppingListCard.js
 import React from 'react';
 
 const ShoppingListCard = ({ list, onListClick }) => {

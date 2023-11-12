@@ -1,16 +1,17 @@
-// src/components/ItemList.js
 import React from 'react';
 
-const ItemList = ({ items, isOwner, onToggleDone, onDeleteItem }) => {
+const ItemList = ({ items, isOwner, onToggleDone, onRemoveItem }) => {
   return (
     <ul>
-      {items.map((item) => (
-        <li key={item.id}>
-          <span>{item.name}</span>
+      {items.map((item, i) => (
+        <li key={i}>
+          <label>
+            <input type="checkbox" name={i + '_done'} checked={item.done} onChange={() => onToggleDone(i)} />
+            <span>{item.name}</span>
+          </label>
           {isOwner && (
             <>
-              <button onClick={() => onToggleDone(item.id)}>Toggle Done</button>
-              <button onClick={() => onDeleteItem(item.id)}>Delete Item</button>
+              <button onClick={() => onRemoveItem(i)}>Delete Item</button>
             </>
           )}
         </li>

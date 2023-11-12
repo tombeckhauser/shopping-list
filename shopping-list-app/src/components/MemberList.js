@@ -1,4 +1,3 @@
-// src/components/MemberList.js
 import React from 'react';
 
 const MemberList = ({ members, isOwner, onRemoveMemberClick }) => {

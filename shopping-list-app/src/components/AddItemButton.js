@@ -1,4 +1,3 @@
-// src/components/AddItemButton.js
 import React, { useState } from 'react';
 
 const AddItemButton = ({ onClick }) => {
@@ -17,7 +16,7 @@ const AddItemButton = ({ onClick }) => {
         value={itemName}
         onChange={(e) => setItemName(e.target.value)}
       />
-      <button onClick={handleAddItem}>Add Item</button>
+      <button disabled={!itemName} onClick={handleAddItem}>Add Item</button>
     </div>
   );
 };

@@ -1,4 +1,3 @@
-// src/components/Item.js
 import React from 'react';
 
 const Item = ({ item, isOwner, onDoneToggle, onDeleteItem }) => {

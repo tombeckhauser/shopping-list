@@ -1,4 +1,3 @@
-// src/components/NewListButton.js
 import React from 'react';
 
 const NewListButton = ({ onClick }) => {
