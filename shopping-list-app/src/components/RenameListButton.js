@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const RenameListButton = ({ onClick }) => {
+const RenameListButton = ({ onClick, disabled }) => {
   const [listName, setListName] = useState('');
 
   const onRename = () => {
@@ -14,9 +14,10 @@ const RenameListButton = ({ onClick }) => {
         type="text"
         placeholder="Enter list name"
         value={listName}
+        disabled={disabled}
         onChange={(e) => setListName(e.target.value)}
       />
-      <button disabled={!listName} onClick={onRename}>Rename list</button>
+      <button disabled={disabled || !listName} onClick={onRename}>Rename list</button>
     </div>
   );
 };

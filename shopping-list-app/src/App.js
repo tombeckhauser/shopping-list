@@ -28,6 +28,7 @@ function App() {
     id: crypto.randomUUID(),
     archived: false,
     items: [],
+    isOwner: true,
     name,
   }]);
 
@@ -44,7 +45,6 @@ function App() {
         <ShoppingList
           lists={lists}
           selectedList={selectedList}
-          isOwner={true} // Replace with owner logic
           onViewList={handleBackToLists}
           onDeleteList={() => deleteList(selectedList)}
           onArchiveList={(archived) => updateList(selectedList, {archived})}

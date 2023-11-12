@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ItemList = ({ items, isOwner, onToggleDone, onRemoveItem }) => {
+const ItemList = ({ items, onToggleDone, onRemoveItem }) => {
   return (
     <ul>
       {items.map((item, i) => (
@@ -9,11 +9,7 @@ const ItemList = ({ items, isOwner, onToggleDone, onRemoveItem }) => {
             <input type="checkbox" name={i + '_done'} checked={item.done} onChange={() => onToggleDone(i)} />
             <span>{item.name}</span>
           </label>
-          {isOwner && (
-            <>
-              <button onClick={() => onRemoveItem(i)}>Delete Item</button>
-            </>
-          )}
+          <button onClick={() => onRemoveItem(i)}>Delete Item</button>
         </li>
       ))}
     </ul>
