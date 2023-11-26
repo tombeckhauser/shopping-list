@@ -1,58 +1,70 @@
-import React, { useState } from 'react';
-import ShoppingLists from './components/ShoppingLists';
-import ShoppingList from './components/ShoppingList';
-import { defaultShoppingLists } from './data';
+import React, { useState, useEffect } from 'react';
 
 function App() {
-  const [selectedList, setSelectedList] = useState(null);
-  const [lists, setLists] = useState(defaultShoppingLists);
+  const [shoppingLists, setShoppingLists] = useState([]);
+  const [selectedListId, setSelectedListId] = useState(null);
 
-  const handleListClick = (listId) => {
-    // Set the selected list based on the clicked list ID
-    setSelectedList(listId); // Replace with actual data
+  // Fetch shopping lists from the server
+  useEffect(() => {
+    fetch('http://localhost:3001/api/getLists')
+      .then(response => response.json())
+      .then(data => setShoppingLists(data))
+      .catch(error => console.error('Error fetching lists:', error));
+  }, []);
+
+  // Create a new shopping list
+  const createList = (name, userId) => {
+    fetch('http://localhost:3001/api/createList', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, userId })
+    })
+    .then(response => response.json())
+    .then(newList => setShoppingLists([...shoppingLists, newList]))
+    .catch(error => console.error('Error creating list:', error));
   };
 
-  const handleBackToLists = () => {
-    // Reset the selected list when navigating back to the lists overview
-    setSelectedList(null);
+  // Delete a shopping list
+  const deleteList = (listId) => {
+    fetch(`http://localhost:3001/api/deleteList?id=${listId}`, {
+      method: 'DELETE'
+    })
+    .then(() => setShoppingLists(shoppingLists.filter(list => list.id !== listId)))
+    .catch(error => console.error('Error deleting list:', error));
   };
 
-  /*
-    // Unpacking lists and why we do it
-    lists = [1,2,3]
-    lists2 = [...lists, 4] // [1, 2, 3, 4]
-    lists3 = [lists, 4] // [[1, 2, 3], 4]
-  */
-
-  const createList = (name) => setLists([...lists, {
-    id: crypto.randomUUID(),
-    archived: false,
-    items: [],
-    isOwner: true,
-    name,
-  }]);
-
-  const deleteList = (id) => setLists(lists.filter(l => l.id !== id));
-
-  const updateList = (id, data) => {
-    //console.log(id, data);
-    return setLists(lists.map(l => l.id === id ? {...l , ...data} : l));
+  // Select a list to view or edit
+  const selectList = (listId) => {
+    setSelectedListId(listId);
   };
 
+  // Deselect the current list
+  const deselectList = () => {
+    setSelectedListId(null);
+  };
+
+  // UI to display and interact with shopping lists
   return (
-    <div className="App">
-      {selectedList ? (
-        <ShoppingList
-          lists={lists}
-          selectedList={selectedList}
-          onViewList={handleBackToLists}
-          onDeleteList={() => deleteList(selectedList)}
-          onArchiveList={(archived) => updateList(selectedList, {archived})}
-          onRenameList={(name) => updateList(selectedList, {name})}
-          onUpdateList={(data) => updateList(selectedList, data)}
-        />
+    <div>
+      <h1>Shopping Lists</h1>
+      {selectedListId ? (
+        // Display selected list details and options to modify it
+        <div>
+          <button onClick={deselectList}>Back to Lists</button>
+          {/* Additional UI for the selected list */}
+        </div>
       ) : (
-        <ShoppingLists lists={lists} onListClick={handleListClick} onCreateList={(name) => createList(name)} />
+        // Display all lists and options to create a new one
+        <div>
+          {shoppingLists.map(list => (
+            <div key={list.id}>
+              <span>{list.name}</span>
+              <button onClick={() => selectList(list.id)}>View</button>
+              <button onClick={() => deleteList(list.id)}>Delete</button>
+            </div>
+          ))}
+          <button onClick={() => createList('New List', '123')}>Create New List</button>
+        </div>
       )}
     </div>
   );
