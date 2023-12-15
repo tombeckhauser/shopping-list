@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import ThemeSwitch from './ThemeSwitch';
+import ItemList from './components/ItemList'; // Ensure this path is correct
 
 function App() {
   const [shoppingLists, setShoppingLists] = useState([]);
@@ -33,6 +35,16 @@ function App() {
     .catch(error => console.error('Error deleting list:', error));
   };
 
+  // Toggle an item's done status
+  const toggleDone = (listId, itemId) => {
+    // Logic to toggle the item's done status
+  };
+
+  // Remove an item from a list
+  const removeItem = (listId, itemId) => {
+    // Logic to remove an item from a list
+  };
+
   // Select a list to view or edit
   const selectList = (listId) => {
     setSelectedListId(listId);
@@ -43,18 +55,27 @@ function App() {
     setSelectedListId(null);
   };
 
-  // UI to display and interact with shopping lists
+  // Find the selected list
+  const selectedList = shoppingLists.find(list => list.id === selectedListId);
+
   return (
     <div>
+      <header className="App-header">
+        <ThemeSwitch />
+        {/* Additional header content */}
+      </header>
       <h1>Shopping Lists</h1>
-      {selectedListId ? (
-        // Display selected list details and options to modify it
+      {selectedList ? (
         <div>
           <button onClick={deselectList}>Back to Lists</button>
+          <ItemList 
+            items={selectedList.items || []}  // Ensure 'items' is always an array
+            onToggleDone={(itemId) => toggleDone(selectedListId, itemId)} 
+            onRemoveItem={(itemId) => removeItem(selectedListId, itemId)} 
+          />
           {/* Additional UI for the selected list */}
         </div>
       ) : (
-        // Display all lists and options to create a new one
         <div>
           {shoppingLists.map(list => (
             <div key={list.id}>

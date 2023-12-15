@@ -1,10 +1,15 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const ShoppingList = require('./models/ShoppingList'); // Adjust path to your actual model
 const Member = require('./models/Member'); // Adjust path to your actual model
 const Item = require('./models/Item'); // Adjust path to your actual model
 
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors());
+
 app.use(express.json());
 
 // MongoDB Connection
